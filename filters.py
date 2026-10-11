@@ -21,11 +21,15 @@ def apply_filter(image: Image.Image, filter_name: str) -> Image.Image:
 def convolution(image: Image.Image, kernel: np.ndarray) -> Image.Image:
     img_array = np.array(image, dtype=np.float32)
     image_height, image_width, image_channels = img_array.shape
+
     kernel_height, kernel_width = kernel.shape
+    pad_height = kernel_height // 2
+    pad_width = kernel_width // 2
 
     output_img_array = np.zeros_like(img_array)
-    for i in range(image_height):
-        for j in range(image_width):
+    
+    for i in range(pad_height, image_height - pad_height):
+        for j in range(pad_width, image_width - pad_width):
 
             sum = np.zeros(image_channels, dtype=np.float32)
 
@@ -33,8 +37,8 @@ def convolution(image: Image.Image, kernel: np.ndarray) -> Image.Image:
                 for m in range(kernel_width):
 
                     weight = kernel[n,m]
-                    pixel_value = img_array[i + n, j + m, :]
-                    sum += pixel_value*weight
+                    pixel_value = img_array[i + n - pad_height, j + m - pad_width, :]
+                    sum += pixel_value * weight
 
             output_img_array[i, j, :]= sum
 
