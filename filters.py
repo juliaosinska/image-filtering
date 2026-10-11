@@ -8,7 +8,7 @@ def apply_filter(image: Image.Image, filter_name: str) -> Image.Image:
             [1/9, 1/9, 1/9],
             [1/9, 1/9, 1/9]
         ])
-        return convolution(image, kernel)
+        return basic_convolution(image, kernel)
     
     elif filter_name == "Custom Filter 1":
         pass
@@ -18,7 +18,7 @@ def apply_filter(image: Image.Image, filter_name: str) -> Image.Image:
         
     return image
 
-def convolution(image: Image.Image, kernel: np.ndarray) -> Image.Image:
+def basic_convolution(image: Image.Image, kernel: np.ndarray) -> Image.Image:
     img_array = np.array(image, dtype=np.float32)
     image_height, image_width, image_channels = img_array.shape
 
@@ -26,21 +26,24 @@ def convolution(image: Image.Image, kernel: np.ndarray) -> Image.Image:
     pad_height = kernel_height // 2
     pad_width = kernel_width // 2
 
+    # GenAI: used to help with edge handling by padding the image with edge values
+    padded_img_array = np.pad(img_array, ((pad_height, pad_height), (pad_width, pad_width), (0, 0)), mode='edge')
+
     output_img_array = np.zeros_like(img_array)
     
-    for i in range(pad_height, image_height - pad_height):
-        for j in range(pad_width, image_width - pad_width):
+    for i in range(image_height):
+        for j in range(image_width):
 
-            sum = np.zeros(image_channels, dtype=np.float32)
+            pixel_sum = np.zeros(image_channels, dtype=np.float32)
 
             for n in range(kernel_height):
                 for m in range(kernel_width):
 
                     weight = kernel[n,m]
-                    pixel_value = img_array[i + n - pad_height, j + m - pad_width, :]
-                    sum += pixel_value * weight
+                    pixel_value = padded_img_array[i + n, j + m, :]
+                    pixel_sum += pixel_value * weight
 
-            output_img_array[i, j, :]= sum
+            output_img_array[i, j, :]= pixel_sum
 
     output_img_array = np.clip(output_img_array, 0, 255).astype(np.uint8)
     return Image.fromarray(output_img_array)

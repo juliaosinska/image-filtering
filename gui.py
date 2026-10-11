@@ -1,5 +1,5 @@
 
-#GENAI: Gemini for GUI implementation
+#GenAI: Gemini for GUI implementation
 
 import tkinter as tk
 from tkinter import filedialog, ttk
