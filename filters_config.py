@@ -1,12 +1,10 @@
 import numpy as np
 from PIL import Image
 
-def get_averaging_kernel():
-    return np.array([
-        [1/9, 1/9, 1/9],
-        [1/9, 1/9, 1/9],
-        [1/9, 1/9, 1/9]
-    ])
+def get_averaging_kernel(size=3):
+    kernel = np.ones((size, size)) / (size * size)
+
+    return kernel
 
 def get_sharpening_kernel(strength=1.0):
     return np.array([
@@ -17,12 +15,14 @@ def get_sharpening_kernel(strength=1.0):
 
 def get_gaussian_kernel(sigma=1.0, size=3):
     kernel = np.zeros((size, size))
+    
     for x in range(size):
         for y in range(size):
             x_dist = x - size // 2
             y_dist = y - size // 2
             kernel[x, y] = np.exp(-(x_dist**2 + y_dist**2) / (2 * (sigma**2)))
     kernel /= np.sum(kernel)
+
     return kernel
 
 def get_laplacian_kernel():
