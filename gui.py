@@ -46,7 +46,7 @@ class ImageFilterApp:
         self.control_frame_bottom = tk.Frame(root, pady=5)
         self.control_frame_bottom.pack(side=tk.TOP, fill=tk.X)
 
-        # 1. Kernel Size Frame (Now ALWAYS visible for all filters!)
+        # 1. Kernel Size Frame (used by Averaging and Gaussian)
         self.size_frame = tk.Frame(self.control_frame_bottom)
         tk.Label(self.size_frame, text="Kernel Size:").pack(side=tk.LEFT, padx=(10, 2))
         self.size_var = tk.StringVar(value="3")
@@ -98,7 +98,7 @@ class ImageFilterApp:
         self.sigma_frame.pack_forget()
         self.strength_frame.pack_forget()
 
-        if selected != "Laplacian" or selected != "Sharpening":
+        if selected not in ("Laplacian", "Sharpening"):
             self.size_frame.pack(side=tk.LEFT, padx=10)
         
         if selected == "Gaussian":
