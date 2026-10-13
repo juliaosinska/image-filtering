@@ -98,7 +98,7 @@ class ImageFilterApp:
         self.sigma_frame.pack_forget()
         self.strength_frame.pack_forget()
 
-        if selected != "Laplacian":
+        if selected != "Laplacian" or selected != "Sharpening":
             self.size_frame.pack(side=tk.LEFT, padx=10)
         
         if selected == "Gaussian":
