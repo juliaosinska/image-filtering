@@ -20,7 +20,9 @@ def get_gaussian_kernel(sigma=1.0, size=3):
         for y in range(size):
             x_dist = x - size // 2
             y_dist = y - size // 2
+            # GenAI: Gemini used to help with using correct Gaussian kernel formula
             kernel[x, y] = np.exp(-(x_dist**2 + y_dist**2) / (2 * (sigma**2)))
+            
     kernel /= np.sum(kernel)
 
     return kernel

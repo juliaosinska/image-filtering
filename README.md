@@ -49,6 +49,7 @@ python gui.py
     - User Interface implementation (desktop window, user controls etc.),
     - helping with the development of the optimized convolution (vectorization for faster image processing),
     - handling image edges,
+    - getting the Gaussian filter kernel formula right for adjustable sigma value,
     - basic debugging.
 
 - Observations after testing with different parameters values:
