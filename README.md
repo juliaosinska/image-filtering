@@ -17,7 +17,7 @@ This project lets you upload an image, choose a filter, preview the result, and 
 
 - Upload an image from disk
 - Preview original and filtered versions side by side
-- Adjust filter parameters such as sigma for Gaussian, strength for sharpening and kernel size for Averaging, Sharpening and Gaussian
+- Adjust filter parameters such as sigma for Gaussian, strength for sharpening and kernel size for Averaging and Gaussian
 - Toggle between optimized and basic convolution implementations
 - Save the filtered image as PNG or JPEG
 
