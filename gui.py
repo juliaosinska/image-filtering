@@ -25,8 +25,8 @@ class ImageFilterApp:
 
         self.filter_var = tk.StringVar(value="Averaging")
         self.filter_dropdown = ttk.Combobox(control_frame, textvariable=self.filter_var, 
-                                            values=["Averaging", "Custom Filter 1", "Custom Filter 2"], 
-                                            state="readonly")
+                                            values=["Averaging", "Sharpening", "Gaussian", "Laplacian"], state="readonly")
+        
         self.filter_dropdown.pack(side=tk.LEFT, padx=10)
 
         self.filter_btn = tk.Button(control_frame, text="Filter", command=self.process_image)

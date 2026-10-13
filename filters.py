@@ -8,14 +8,42 @@ def apply_filter(image: Image.Image, filter_name: str) -> Image.Image:
             [1/9, 1/9, 1/9],
             [1/9, 1/9, 1/9]
         ])
+
         return optimized_convolution(image, kernel)
     
-    elif filter_name == "Custom Filter 1":
-        pass
+    elif filter_name == "Sharpening":
+        strength = 1.0
+
+        kernel = np.array([
+            [0, -strength, 0],
+            [-strength, 1 + 4 * strength, -strength],
+            [0, -strength, 0]
+        ])
+
+        return optimized_convolution(image, kernel)
+    
+    elif filter_name == "Gaussian":
+        kernel_size = 3
+        sigma = 1.0
+        kernel = np.zeros((kernel_size, kernel_size))
         
-    elif filter_name == "Custom Filter 2":
-        pass
-        
+        for x in range(kernel_size):
+            for y in range(kernel_size):
+                x_dist = x - kernel_size // 2
+                y_dist = y - kernel_size // 2
+                kernel[x, y] = np.exp(-(x_dist**2 + y_dist**2) / (2 * (sigma**2)))
+
+        kernel /= np.sum(kernel)
+        return optimized_convolution(image, kernel)
+
+    elif filter_name == "Laplacian":
+        kernel = np.array([
+            [0, 1, 0],
+            [1, -4, 1],
+            [0, 1, 0]
+        ])
+
+        return optimized_convolution(image, kernel)
     return image
 
 def optimized_convolution(image: Image.Image, kernel: np.ndarray) -> Image.Image:
