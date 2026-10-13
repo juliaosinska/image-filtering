@@ -1,50 +1,7 @@
 from PIL import Image, ImageOps
 import numpy as np
 
-def apply_filter(image: Image.Image, filter_name: str) -> Image.Image:
-    if filter_name == "Averaging":
-        kernel = np.array([
-            [1/9, 1/9, 1/9],
-            [1/9, 1/9, 1/9],
-            [1/9, 1/9, 1/9]
-        ])
-
-        return optimized_convolution(image, kernel)
-    
-    elif filter_name == "Sharpening":
-        strength = 1.0
-
-        kernel = np.array([
-            [0, -strength, 0],
-            [-strength, 1 + 4 * strength, -strength],
-            [0, -strength, 0]
-        ])
-
-        return optimized_convolution(image, kernel)
-    
-    elif filter_name == "Gaussian":
-        kernel_size = 3
-        sigma = 1.0
-        kernel = np.zeros((kernel_size, kernel_size))
-        
-        for x in range(kernel_size):
-            for y in range(kernel_size):
-                x_dist = x - kernel_size // 2
-                y_dist = y - kernel_size // 2
-                kernel[x, y] = np.exp(-(x_dist**2 + y_dist**2) / (2 * (sigma**2)))
-
-        kernel /= np.sum(kernel)
-        return optimized_convolution(image, kernel)
-
-    elif filter_name == "Laplacian":
-        kernel = np.array([
-            [0, 1, 0],
-            [1, -4, 1],
-            [0, 1, 0]
-        ])
-
-        return optimized_convolution(image, kernel)
-    return image
+from filters_config import FILTER_CONFIG
 
 def optimized_convolution(image: Image.Image, kernel: np.ndarray) -> Image.Image:
     img_array = np.array(image, dtype=np.float32)
@@ -101,3 +58,21 @@ def basic_convolution(image: Image.Image, kernel: np.ndarray) -> Image.Image:
 
     output_img_array = np.clip(output_img_array, 0, 255).astype(np.uint8)
     return Image.fromarray(output_img_array)
+
+def apply_filter(image: Image.Image, filter_name: str, optimized: bool = True, sigma: float = 1.0, strength: float = 1.0) -> Image.Image:
+    if filter_name in FILTER_CONFIG:
+        kernel_function = FILTER_CONFIG[filter_name]
+
+        if filter_name == "Gaussian":
+            kernel = kernel_function(sigma=sigma)
+        elif filter_name == "Sharpening":
+            kernel = kernel_function(strength=strength)
+        else:
+            kernel = kernel_function()
+
+        if optimized:
+            return optimized_convolution(image, kernel)
+        else:
+            return basic_convolution(image, kernel)
+    else:
+        raise ValueError(f"Filter '{filter_name}' is not defined in FILTER_CONFIG.")
