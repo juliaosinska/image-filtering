@@ -48,7 +48,8 @@ python gui.py
 - GenAI tools used - Gemini for:
     - User Interface implementation (desktop window, user controls etc.),
     - helping with the development of the optimized convolution (vectorization for faster image processing),
-    - handling image edges.
+    - handling image edges,
+    - usual debugging.
 
 - Observations after testing with different parameters values:
     - Averaging and Gaussian as smoothing (blurring) filters produce more blur with larger kernel and/or larger sigma values, which means less details and softer edges.
